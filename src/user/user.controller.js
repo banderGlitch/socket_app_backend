@@ -23,7 +23,7 @@ class user_controller extends user_module {
             });
         }
     }
-    
+
     static get_users = async (req, res) => {
         try {
             console.log("controller response", req.body);
@@ -35,6 +35,36 @@ class user_controller extends user_module {
                 message: message,
                 data: response
             });
+        } catch (error) {
+            let status_code = error.status && error.status.code !== undefined ? error.status.code : 500;
+            let type = error.type !== undefined ? error.type : 'Bad Request';
+            let message = error.custom_msg !== undefined ? error.custom_msg : 'Something went wrong';
+            res.status(status_code).send({
+                success: false,
+                error: type,
+                message: message
+            });
+        }
+    }
+    static otp_verify = async (req, res) => {
+        try {
+            console.log("controller response", req.body);
+            let response = await this.verify_user(req)
+            if (response.status) {
+                res.send({
+                    success: true,
+                    message: response.message,
+                    data: response.user
+                });
+
+            } else {
+                res.status(400).send({
+                    success: false,
+                    error: false,
+                    message: response.message
+                })
+            }
+
         } catch (error) {
             let status_code = error.status && error.status.code !== undefined ? error.status.code : 500;
             let type = error.type !== undefined ? error.type : 'Bad Request';

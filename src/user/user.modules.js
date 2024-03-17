@@ -26,9 +26,7 @@ class user_module {
                 limit: Number(limit) || 10
             }
             let users = await models.users.find(query, projection, options)
-            console.log("users==========>", users)
             let count = await models.users.countDocuments(query)
-            console.log("counts==========>",count)
             return { users , count}
 
         } catch (err) {
